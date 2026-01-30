@@ -15,7 +15,7 @@ export class App {
       date: '09/03/2022',
       open: 5.0666,
       close: 5.0038,
-      high: 5.0680,
+      high: 5.0689,
       low: 4.9836,
       closeFiff: -1.15
     },
@@ -23,7 +23,55 @@ export class App {
       date: '07/03/2022',
       open: 5.0666,
       close: 5.0038,
-      high: 5.0680,
+      high: 5.0689,
+      low: 4.9836,
+      closeFiff: 1.15
+    },
+    {
+      date: '09/03/2022',
+      open: 5.0666,
+      close: 5.0038,
+      high: 5.0689,
+      low: 4.9836,
+      closeFiff: -1.15
+    },
+    {
+      date: '07/03/2022',
+      open: 5.0666,
+      close: 5.0038,
+      high: 5.0689,
+      low: 4.9836,
+      closeFiff: 1.15
+    },
+    {
+      date: '09/03/2022',
+      open: 5.0666,
+      close: 5.0038,
+      high: 5.0689,
+      low: 4.9836,
+      closeFiff: -1.15
+    },
+    {
+      date: '07/03/2022',
+      open: 5.0666,
+      close: 5.0038,
+      high: 5.0689,
+      low: 4.9836,
+      closeFiff: 1.15
+    },
+    {
+      date: '09/03/2022',
+      open: 5.0666,
+      close: 5.0038,
+      high: 5.0689,
+      low: 4.9836,
+      closeFiff: -1.15
+    },
+    {
+      date: '07/03/2022',
+      open: 5.0666,
+      close: 5.0038,
+      high: 5.0689,
       low: 4.9836,
       closeFiff: 1.15
     },

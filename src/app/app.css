@@ -6,8 +6,10 @@
     grid-template-rows: repeat(5, auto) 1fr auto;
     gap: 0 30px;
     padding: 0 15px;
+    box-sizing: border-box;
     width: min(360px, 100%);
     margin-inline: auto;
+    white-space: nowrap;
 
     &>* {
         /* Every child occupy full width by default */
@@ -44,6 +46,15 @@
 #result-button {
     margin: 32px 0;
     background-color: #07B0FB;
+
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    letter-spacing: 0%;
+    text-align: center;
+    vertical-align: middle;
+    text-transform: uppercase;
 }
 
 #exchange-container {
@@ -140,7 +151,7 @@
 }
 
 .exchange-card {
-    padding: 16px;
+    padding: 16px 20px 15px 16px;
     background-color: white;
     box-shadow: 0px 2px 8px 0px #0000001A;
 }
@@ -148,7 +159,6 @@
 .exchange-date {
     font-family: Roboto;
     font-weight: 600;
-    font-style: SemiBold;
     font-size: .875rem;
     line-height: 1.375rem;
     letter-spacing: 0rem;
@@ -173,7 +183,6 @@
 .exchange-data-title {
     font-family: Roboto;
     font-weight: 500;
-    font-style: Medium;
     font-size: .6875rem;
     line-height: .875rem;
     vertical-align: middle;
@@ -184,7 +193,6 @@
 .exchange-data-value {
     font-family: Roboto;
     font-weight: 600;
-    font-style: SemiBold;
     font-size: 1rem;
     line-height: 1.5rem;
     letter-spacing: 0rem;
@@ -195,7 +203,6 @@
 .exchange-diff-value {
     font-family: Roboto;
     font-weight: 600;
-    font-style: SemiBold;
     font-size: 1rem;
     line-height: 1.5rem;
     letter-spacing: 0rem;
