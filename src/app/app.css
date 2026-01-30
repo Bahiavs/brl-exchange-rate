@@ -10,6 +10,7 @@
     width: min(360px, 100%);
     margin-inline: auto;
     white-space: nowrap;
+    background-color: white;
 
     &>* {
         /* Every child occupy full width by default */
