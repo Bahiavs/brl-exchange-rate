@@ -1,11 +1,12 @@
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-root',
-  template: `
-    Hello, BRL Exchange Rate!
-  `,
-  styles: [],
+  imports: [MatInputModule, MatButtonModule],
+  templateUrl: 'app.html',
+  styleUrl: 'app.css',
 })
 export class App {
 }
