@@ -1,18 +1,19 @@
-import { Component, inject, signal } from '@angular/core';
-import { CurrencyPipe } from '@angular/common';
+import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { CurrencyPipe, DatePipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { CurrentExchangeRateDTO, ExchangeRateService } from './services/exchange-rate.service';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
-  imports: [MatInputModule, MatButtonModule, MatIconModule, ReactiveFormsModule, CurrencyPipe],
+  imports: [MatInputModule, MatButtonModule, MatIconModule, ReactiveFormsModule, CurrencyPipe, DatePipe],
   templateUrl: 'app.html',
   styleUrl: 'app.css',
 })
-export class App {
+export class App implements OnInit, OnDestroy {
   private readonly exchangeRateService = inject(ExchangeRateService)
   protected readonly last30DaysExchange = [
     {
@@ -83,6 +84,21 @@ export class App {
   protected readonly isExpanded = signal(true)
   protected readonly currencyCtrl = new FormControl('')
   protected readonly currentExchangeRate = signal<undefined | 'loading' | CurrentExchangeRateDTO>(undefined)
+  private readonly subs = new Subscription()
+
+  ngOnInit() {
+    const sub = this.currencyCtrl.valueChanges.subscribe(value => {
+      if (value === null) return
+      const uppercaseValue = value.toUpperCase()
+      if (value === uppercaseValue) return
+      this.currencyCtrl.setValue(uppercaseValue, { emitEvent: false })
+    })
+    this.subs.add(sub)
+  }
+
+  ngOnDestroy() {
+    this.subs.unsubscribe()
+  }
 
   protected toggleExpansion() {
     this.isExpanded.update(isExpanded => !isExpanded)

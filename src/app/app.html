@@ -23,8 +23,9 @@
         <hr id="exchange-divider">
         <div id="exchange-now-container">
             <div id="exchange-now">Exchange rate now</div>
-            <!-- <div id="exchange-time">09/03/2022 - 15h09</div> -->
-            <div id="exchange-time">{{exchangeRateNow.lastUpdatedAt}}</div>
+            <div id="exchange-time">
+                {{exchangeRateNow.lastUpdatedAt | date:'dd/MM/yyyy - HH\'h\'mm'}}
+            </div>
         </div>
         <div id="currencies">{{exchangeRateNow.fromSymbol}}/BRL</div>
         <div id="exchange-rate">
