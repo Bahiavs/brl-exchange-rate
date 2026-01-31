@@ -49,6 +49,7 @@ export class App implements OnInit, OnDestroy {
 
   protected getCurrent() {
     if (this.currencyCtrl.value === null) return console.error('invalid currency code')
+    this.dailyExchangeRate.set(undefined)
     this.currentExchangeRate.set('loading')
     this.exchangeRateService.getCurrent(this.currencyCtrl.value).subscribe({
       next: res => {
