@@ -1,7 +1,8 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { ExchangeRateService } from './services/exchange-rate.service';
 
 @Component({
   selector: 'app-root',
@@ -10,6 +11,7 @@ import { MatInputModule } from '@angular/material/input';
   styleUrl: 'app.css',
 })
 export class App {
+  private readonly exchangeRateService = inject(ExchangeRateService)
   protected readonly last30DaysExchange = [
     {
       date: '09/03/2022',
@@ -80,5 +82,21 @@ export class App {
 
   protected toggleExpansion() {
     this.isExpanded.update(isExpanded => !isExpanded)
+  }
+
+  protected getCurrent() {
+    this.exchangeRateService.getCurrent('BRL', 'USD').subscribe({
+      next: res => {
+        console.log(res)
+      }
+    })
+  }
+
+  protected getDaily() {
+    this.exchangeRateService.getDaily('BRL', 'USD').subscribe({
+      next: res => {
+        console.log(res)
+      }
+    })
   }
 }
