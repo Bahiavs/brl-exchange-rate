@@ -140,15 +140,17 @@ export class App implements OnInit, OnDestroy {
         }
         const dailyExchangeRate: DailyExchangeRate = {
           lastUpdatedAt: res.lastUpdatedAt,
-          data: res.data.map((item, i) => {
-            if (i >= res.data.length) return { ...item, closeDiff: null }
-            const currentClose = item.close
-            const previousClose = res.data[i + 1].close
-            return {
-              ...item,
-              closeDiff: (currentClose / (previousClose / 100)) - 100
-            }
-          })
+          data: res.data
+            .map((item, i) => {
+              if (i === res.data.length - 1) return { ...item, closeDiff: null }
+              const currentClose = item.close
+              const previousClose = res.data[i + 1].close
+              return {
+                ...item,
+                closeDiff: (currentClose / (previousClose / 100)) - 100
+              }
+            })
+            .slice(0, 30)
         }
         this.dailyExchangeRate.set(dailyExchangeRate)
       },
