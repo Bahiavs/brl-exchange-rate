@@ -6,10 +6,7 @@
     BRL EXCHANGE RATE
 </div>
 
-<mat-form-field id="currency-input">
-    <mat-label>Enter the currency code</mat-label>
-    <input matInput [formControl]="currencyCtrl">
-</mat-form-field>
+<app-input [formCtrl]="currencyCtrl" label="Enter the currency code"/>
 
 <button (click)="getCurrent()" id="result-button" matButton="filled">
     EXCHANGE RESULT

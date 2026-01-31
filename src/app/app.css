@@ -40,12 +40,6 @@
     color: #07B0FB;
 }
 
-#currency-input {
-    /* Make the content bellow disappear */
-    /* .mat-mdc-form-field-subscript-wrapper, .mat-mdc-form-field-bottom-align::before */
-    margin-bottom: -20px;
-}
-
 #result-button {
     margin: 32px 0;
     background-color: #07B0FB;
