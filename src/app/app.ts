@@ -6,10 +6,11 @@ import { MatInputModule } from '@angular/material/input';
 import { CurrentExchangeRateDTO, DailyExchangeRateDTO, ExchangeRateService } from './services/exchange-rate.service';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { Loader } from "./components/loader/loader";
 
 @Component({
   selector: 'app-root',
-  imports: [MatInputModule, MatButtonModule, MatIconModule, ReactiveFormsModule, CurrencyPipe, DatePipe],
+  imports: [MatInputModule, MatButtonModule, MatIconModule, ReactiveFormsModule, CurrencyPipe, DatePipe, Loader],
   templateUrl: 'app.html',
   styleUrl: 'app.css',
 })

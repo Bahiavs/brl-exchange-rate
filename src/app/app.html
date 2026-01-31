@@ -18,7 +18,9 @@
 <div id="exchange-container">
     @let exchangeRateNow = currentExchangeRate();
     @if (exchangeRateNow === undefined) {}
-    @else if (exchangeRateNow === 'loading') { Loading... }
+    @else if (exchangeRateNow === 'loading') { 
+        <loader style="grid-column: 1 / -1"/> 
+    }
     @else {
         <hr id="exchange-divider">
         <div id="exchange-now-container">
@@ -48,7 +50,7 @@
             <div id="expansion-content">
                 @let dailyExchangeRateVal = dailyExchangeRate();
                 @if (dailyExchangeRateVal === undefined) {}
-                @else if (dailyExchangeRateVal === 'loading') { Loading... }
+                @else if (dailyExchangeRateVal === 'loading') { <loader style="margin-top: 10px"/> }
                 @else {
                     @for (rate of dailyExchangeRateVal.data; track rate) {
                         <div class="exchange-card">

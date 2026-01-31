@@ -62,7 +62,8 @@
 #exchange-container {
     display: grid;
     grid-template-columns: subgrid;
-    align-content: start;
+    align-content: center;
+    margin-bottom: 40px;
 }
 
 #exchange-now-container {
@@ -116,7 +117,6 @@
 #expansion-container {
     grid-column: 1 / -1;
     border-bottom: 2px solid #07B0FB;
-    margin-bottom: 40px;
 }
 
 #expansion-header {
