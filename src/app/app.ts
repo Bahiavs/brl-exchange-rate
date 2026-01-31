@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -15,11 +15,12 @@ import { Subscription } from 'rxjs';
 })
 export class App implements OnInit, OnDestroy {
   private readonly exchangeRateService = inject(ExchangeRateService)
-  protected readonly isExpanded = signal(false)
   protected readonly currencyCtrl = new FormControl('')
   protected readonly currentExchangeRate = signal<undefined | 'loading' | CurrentExchangeRateDTO>(undefined)
   protected readonly dailyExchangeRate = signal<undefined | 'loading' | DailyExchangeRate>(undefined)
+  protected readonly isExpanded = computed(() => this.dailyExchangeRate() !== undefined)
   private readonly subs = new Subscription()
+  private getDailySub = new Subscription()
 
   ngOnInit() {
     const sub = this.currencyCtrl.valueChanges.subscribe(value => {
@@ -36,9 +37,14 @@ export class App implements OnInit, OnDestroy {
   }
 
   protected toggleExpansion() {
-    const isExpanded = this.isExpanded()
-    if (!isExpanded) this.getDaily()
-    this.isExpanded.update(isExpanded => !isExpanded)
+    const dailyExchangeRate = this.dailyExchangeRate()
+    if (dailyExchangeRate === undefined) {
+      this.getDaily()
+      return
+    }
+    this.dailyExchangeRate.set(undefined)
+    this.getDailySub.unsubscribe() // Abort request if loading
+    this.getDailySub = new Subscription() // Prevent error when requesting again after any abortion
   }
 
   protected getCurrent() {
@@ -62,10 +68,10 @@ export class App implements OnInit, OnDestroy {
 
   protected getDaily() {
     const currentExchangeRate = this.currentExchangeRate()
-    if (currentExchangeRate === undefined) return
+    if (currentExchangeRate === undefined) return 
     if (currentExchangeRate === 'loading') return
     this.dailyExchangeRate.set('loading')
-    this.exchangeRateService.getDaily(currentExchangeRate.fromSymbol).subscribe({
+    const sub = this.exchangeRateService.getDaily(currentExchangeRate.fromSymbol).subscribe({
       next: res => {
         if (!res.success) {
           alert('Error getting daily exchange rate')
@@ -93,6 +99,7 @@ export class App implements OnInit, OnDestroy {
         this.dailyExchangeRate.set(undefined)
       }
     })
+    this.getDailySub.add(sub)
   }
 }
 
