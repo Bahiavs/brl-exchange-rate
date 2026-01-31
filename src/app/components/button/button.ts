@@ -15,7 +15,6 @@ import { MatButtonModule } from '@angular/material/button';
         }
         button {
             width: 100%;
-            background-color: #07B0FB !important;
             font-family: Roboto;
             font-weight: 500;
             font-size: 1rem;
