@@ -8,18 +8,18 @@ export class ExchangeRateService {
     private readonly apiKey = 'RVZG0GHEV2KORLNA'
     private readonly baseUrl = 'https://api-brl-exchange.actionlabs.com.br/api/1.0/open/'
 
-    getCurrent(from: string, to: string): Observable<CurrentExchangeRateDTO> {
-        const url = `${this.baseUrl}currentExchangeRate?apiKey=${this.apiKey}&from_symbol=${from}&to_symbol=${to}`
+    getCurrent(from: string): Observable<CurrentExchangeRateDTO> {
+        const url = `${this.baseUrl}currentExchangeRate?apiKey=${this.apiKey}&from_symbol=${from}&to_symbol=BRL`
         return this.http.get<CurrentExchangeRateDTO>(url)
     }
 
-    getDaily(from: string, to: string): Observable<DailyExchangeRateDTO> {
-        const url = `${this.baseUrl}dailyExchangeRate?apiKey=${this.apiKey}&from_symbol=${from}&to_symbol=${to}`
+    getDaily(from: string): Observable<DailyExchangeRateDTO> {
+        const url = `${this.baseUrl}dailyExchangeRate?apiKey=${this.apiKey}&from_symbol=${from}&to_symbol=BRL`
         return this.http.get<DailyExchangeRateDTO>(url)
     }
 }
 
-type CurrentExchangeRateDTO = {
+export type CurrentExchangeRateDTO = {
     exchangeRate: number
     fromSymbol: string
     lastUpdatedAt: string
@@ -28,7 +28,7 @@ type CurrentExchangeRateDTO = {
     toSymbol: string
 }
 
-type DailyExchangeRateDTO = {
+export type DailyExchangeRateDTO = {
     data: {
         close: number
         date: string

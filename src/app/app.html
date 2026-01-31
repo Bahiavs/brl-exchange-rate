@@ -8,95 +8,103 @@
 
 <mat-form-field id="currency-input">
     <mat-label>Enter the currency code</mat-label>
-    <input matInput>
+    <input matInput [formControl]="currencyCtrl">
 </mat-form-field>
 
-<button id="result-button" matButton="filled">
+<button (click)="getCurrent()" id="result-button" matButton="filled">
     EXCHANGE RESULT
 </button>
 
 <div id="exchange-container">
-    <hr id="exchange-divider">
-    <div id="exchange-now-container">
-        <div id="exchange-now">Exchange rate now</div>
-        <div id="exchange-time">09/03/2022 - 15h09</div>
-    </div>
-    <div id="currencies">USD/BRL</div>
-    <div id="exchange-rate">R$ 5,00</div>
-    <details [open]="isExpanded()" (click)="$event.preventDefault()" id="expansion-container">
-        <summary id="expansion-header">
-            <span id="expansion-title">
-                LAST 30 DAYS
-            </span>
-            <button (click)="toggleExpansion()" id="expansion-button">
-                @if (!isExpanded()) {
-                    <img src="add.svg">
-                }
-                @else {
-                    <img src="remove.svg">
-                }
-            </button>
-        </summary>
-        <div id="expansion-content">
-            @for (exchange of last30DaysExchange; track exchange) {
-                <div class="exchange-card">
-                    <div class="exchange-date">{{exchange.date}}</div>
-                    <div class="exchange-data">
-                        <div>
-                            <span class="exchange-data-title">
-                                OPEN:
-                            </span>
-                            <span class="exchange-data-value">
-                                R$ {{exchange.open}}
-                            </span>
-                        </div>
-                        <div>
-                            <span class="exchange-data-title">
-                                HIGH:
-                            </span>
-                            <span class="exchange-data-value">
-                                R$ {{exchange.high}}
-                            </span>
-                        </div>
-                        <div>
-                            <span class="exchange-data-title">
-                                CLOSE:
-                            </span>
-                            <span class="exchange-data-value">
-                                R$ {{exchange.close}}
-                            </span>
-                        </div>
-                        <div>
-                            <span class="exchange-data-title">
-                                LOW:
-                            </span>
-                            <span class="exchange-data-value">
-                                R$ {{exchange.low}}
-                            </span>
-                        </div>
-                    </div>
-                    <div>
-                        <span class="exchange-data-title">
-                            CLOSE DIFF (%):
-                        </span>
-                        <span 
-                            class="exchange-diff-value"
-                            [class.negative]="exchange.closeFiff < 0"
-                            [class.positive]="exchange.closeFiff > 0"
-                        >
-                            @if (exchange.closeFiff > 0) {
-                                +{{exchange.closeFiff}}%
-                                <img src="chevron-up.svg">
-                            } @else {
-                                {{exchange.closeFiff}}%
-                                <img src="chevron-down.svg">
-                            }
-                        </span>
-                    </div>
-                </div>
-            }
+    @let exchangeRateNow = currentExchangeRate();
+    @if (exchangeRateNow === undefined) {}
+    @else if (exchangeRateNow === 'loading') { Loading... }
+    @else {
+        <hr id="exchange-divider">
+        <div id="exchange-now-container">
+            <div id="exchange-now">Exchange rate now</div>
+            <!-- <div id="exchange-time">09/03/2022 - 15h09</div> -->
+            <div id="exchange-time">{{exchangeRateNow.lastUpdatedAt}}</div>
         </div>
-    </details>
+        <div id="currencies">{{exchangeRateNow.fromSymbol}}/BRL</div>
+        <div id="exchange-rate">
+            {{exchangeRateNow.exchangeRate | currency: 'BRL':'symbol':'1.2-2':'pt-BR'}}
+        </div>
+        <details [open]="isExpanded()" (click)="$event.preventDefault()" id="expansion-container">
+            <summary id="expansion-header">
+                <span id="expansion-title">
+                    LAST 30 DAYS
+                </span>
+                <button (click)="toggleExpansion()" id="expansion-button">
+                    @if (!isExpanded()) {
+                        <img src="add.svg">
+                    }
+                    @else {
+                        <img src="remove.svg">
+                    }
+                </button>
+            </summary>
+            <div id="expansion-content">
+                @for (exchange of last30DaysExchange; track exchange) {
+                    <div class="exchange-card">
+                        <div class="exchange-date">{{exchange.date}}</div>
+                        <div class="exchange-data">
+                            <div>
+                                <span class="exchange-data-title">
+                                    OPEN:
+                                </span>
+                                <span class="exchange-data-value">
+                                    R$ {{exchange.open}}
+                                </span>
+                            </div>
+                            <div>
+                                <span class="exchange-data-title">
+                                    HIGH:
+                                </span>
+                                <span class="exchange-data-value">
+                                    R$ {{exchange.high}}
+                                </span>
+                            </div>
+                            <div>
+                                <span class="exchange-data-title">
+                                    CLOSE:
+                                </span>
+                                <span class="exchange-data-value">
+                                    R$ {{exchange.close}}
+                                </span>
+                            </div>
+                            <div>
+                                <span class="exchange-data-title">
+                                    LOW:
+                                </span>
+                                <span class="exchange-data-value">
+                                    R$ {{exchange.low}}
+                                </span>
+                            </div>
+                        </div>
+                        <div>
+                            <span class="exchange-data-title">
+                                CLOSE DIFF (%):
+                            </span>
+                            <span 
+                                class="exchange-diff-value"
+                                [class.negative]="exchange.closeFiff < 0"
+                                [class.positive]="exchange.closeFiff > 0"
+                            >
+                                @if (exchange.closeFiff > 0) {
+                                    +{{exchange.closeFiff}}%
+                                    <img src="chevron-up.svg">
+                                } @else {
+                                    {{exchange.closeFiff}}%
+                                    <img src="chevron-down.svg">
+                                }
+                            </span>
+                        </div>
+                    </div>
+                }
+            </div>
+        </details>
+    }
 </div>
 
 <div id="footer">

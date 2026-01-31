@@ -1,12 +1,14 @@
 import { Component, inject, signal } from '@angular/core';
+import { CurrencyPipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { ExchangeRateService } from './services/exchange-rate.service';
+import { CurrentExchangeRateDTO, ExchangeRateService } from './services/exchange-rate.service';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
-  imports: [MatInputModule, MatButtonModule, MatIconModule],
+  imports: [MatInputModule, MatButtonModule, MatIconModule, ReactiveFormsModule, CurrencyPipe],
   templateUrl: 'app.html',
   styleUrl: 'app.css',
 })
@@ -79,21 +81,35 @@ export class App {
     },
   ]
   protected readonly isExpanded = signal(true)
+  protected readonly currencyCtrl = new FormControl('')
+  protected readonly currentExchangeRate = signal<undefined | 'loading' | CurrentExchangeRateDTO>(undefined)
 
   protected toggleExpansion() {
     this.isExpanded.update(isExpanded => !isExpanded)
   }
 
   protected getCurrent() {
-    this.exchangeRateService.getCurrent('BRL', 'USD').subscribe({
+    if (this.currencyCtrl.value === null) return console.error('invalid currency code')
+    this.currentExchangeRate.set('loading')
+    this.exchangeRateService.getCurrent(this.currencyCtrl.value).subscribe({
       next: res => {
-        console.log(res)
+        if (!res.success) {
+          alert('Error getting current exchange rate')
+          this.currentExchangeRate.set(undefined)
+          return
+        }
+        this.currentExchangeRate.set(res)
+      },
+      error: err => {
+        alert('Error getting current exchange rate')
+        this.currentExchangeRate.set(undefined)
       }
     })
   }
 
   protected getDaily() {
-    this.exchangeRateService.getDaily('BRL', 'USD').subscribe({
+    if (this.currencyCtrl.value === null) return console.error('invalid currency code')
+    this.exchangeRateService.getDaily(this.currencyCtrl.value).subscribe({
       next: res => {
         console.log(res)
       }
