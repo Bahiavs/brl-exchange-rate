@@ -5,6 +5,9 @@ import { Observable } from "rxjs";
 @Injectable({ providedIn: 'root' })
 export class ExchangeRateService {
     private readonly http = inject(HttpClient)
+    // In real world, it should be get from an environment file.
+    // For this simple project it's safe using the API key directly in the service 
+    // and also upload it to a remote repo
     private readonly apiKey = 'RVZG0GHEV2KORLNA'
     private readonly baseUrl = 'https://api-brl-exchange.actionlabs.com.br/api/1.0/open/'
 
