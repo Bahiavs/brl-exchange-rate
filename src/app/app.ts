@@ -3,7 +3,7 @@ import { CurrencyPipe, DatePipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { CurrentExchangeRateDTO, ExchangeRateService } from './services/exchange-rate.service';
+import { CurrentExchangeRateDTO, DailyExchangeRateDTO, ExchangeRateService } from './services/exchange-rate.service';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
@@ -81,9 +81,10 @@ export class App implements OnInit, OnDestroy {
       closeFiff: 1.15
     },
   ]
-  protected readonly isExpanded = signal(true)
+  protected readonly isExpanded = signal(false)
   protected readonly currencyCtrl = new FormControl('')
   protected readonly currentExchangeRate = signal<undefined | 'loading' | CurrentExchangeRateDTO>(undefined)
+  protected readonly dailyExchangeRate = signal<undefined | 'loading' | DailyExchangeRate>(undefined)
   private readonly subs = new Subscription()
 
   ngOnInit() {
@@ -101,6 +102,8 @@ export class App implements OnInit, OnDestroy {
   }
 
   protected toggleExpansion() {
+    const isExpanded = this.isExpanded()
+    if (!isExpanded) this.getDaily()
     this.isExpanded.update(isExpanded => !isExpanded)
   }
 
@@ -124,11 +127,47 @@ export class App implements OnInit, OnDestroy {
   }
 
   protected getDaily() {
-    if (this.currencyCtrl.value === null) return console.error('invalid currency code')
-    this.exchangeRateService.getDaily(this.currencyCtrl.value).subscribe({
+    const currentExchangeRate = this.currentExchangeRate()
+    if (currentExchangeRate === undefined) return
+    if (currentExchangeRate === 'loading') return
+    this.dailyExchangeRate.set('loading')
+    this.exchangeRateService.getDaily(currentExchangeRate.fromSymbol).subscribe({
       next: res => {
-        console.log(res)
+        if (!res.success) {
+          alert('Error getting daily exchange rate')
+          this.dailyExchangeRate.set(undefined)
+          return
+        }
+        const dailyExchangeRate: DailyExchangeRate = {
+          lastUpdatedAt: res.lastUpdatedAt,
+          data: res.data.map((item, i) => {
+            if (i >= res.data.length) return { ...item, closeDiff: null }
+            const currentClose = item.close
+            const previousClose = res.data[i + 1].close
+            return {
+              ...item,
+              closeDiff: (currentClose / (previousClose / 100)) - 100
+            }
+          })
+        }
+        this.dailyExchangeRate.set(dailyExchangeRate)
+      },
+      error: err => {
+        alert('Error getting daily exchange rate')
+        this.dailyExchangeRate.set(undefined)
       }
     })
   }
+}
+
+type DailyExchangeRate = {
+  data: {
+    close: number
+    date: string
+    high: number
+    low: number
+    open: number
+    closeDiff: null | number
+  }[]
+  lastUpdatedAt: string
 }

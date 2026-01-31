@@ -46,62 +46,74 @@
                 </button>
             </summary>
             <div id="expansion-content">
-                @for (exchange of last30DaysExchange; track exchange) {
-                    <div class="exchange-card">
-                        <div class="exchange-date">{{exchange.date}}</div>
-                        <div class="exchange-data">
-                            <div>
-                                <span class="exchange-data-title">
-                                    OPEN:
-                                </span>
-                                <span class="exchange-data-value">
-                                    R$ {{exchange.open}}
-                                </span>
+                @let dailyExchangeRateVal = dailyExchangeRate();
+                @if (dailyExchangeRateVal === undefined) {}
+                @else if (dailyExchangeRateVal === 'loading') { Loading... }
+                @else {
+                    @for (rate of dailyExchangeRateVal.data; track rate) {
+                        <div class="exchange-card">
+                            <div class="exchange-date">{{rate.date | date:'dd/MM/yyyy'}}</div>
+                            <div class="exchange-data">
+                                <div>
+                                    <span class="exchange-data-title">
+                                        OPEN:
+                                    </span>
+                                    <span class="exchange-data-value">
+                                        R$ {{rate.open}}
+                                    </span>
+                                </div>
+                                <div>
+                                    <span class="exchange-data-title">
+                                        HIGH:
+                                    </span>
+                                    <span class="exchange-data-value">
+                                        R$ {{rate.high}}
+                                    </span>
+                                </div>
+                                <div>
+                                    <span class="exchange-data-title">
+                                        CLOSE:
+                                    </span>
+                                    <span class="exchange-data-value">
+                                        R$ {{rate.close}}
+                                    </span>
+                                </div>
+                                <div>
+                                    <span class="exchange-data-title">
+                                        LOW:
+                                    </span>
+                                    <span class="exchange-data-value">
+                                        R$ {{rate.low}}
+                                    </span>
+                                </div>
                             </div>
                             <div>
                                 <span class="exchange-data-title">
-                                    HIGH:
+                                    CLOSE DIFF (%):
                                 </span>
-                                <span class="exchange-data-value">
-                                    R$ {{exchange.high}}
-                                </span>
-                            </div>
-                            <div>
-                                <span class="exchange-data-title">
-                                    CLOSE:
-                                </span>
-                                <span class="exchange-data-value">
-                                    R$ {{exchange.close}}
-                                </span>
-                            </div>
-                            <div>
-                                <span class="exchange-data-title">
-                                    LOW:
-                                </span>
-                                <span class="exchange-data-value">
-                                    R$ {{exchange.low}}
-                                </span>
-                            </div>
-                        </div>
-                        <div>
-                            <span class="exchange-data-title">
-                                CLOSE DIFF (%):
-                            </span>
-                            <span 
-                                class="exchange-diff-value"
-                                [class.negative]="exchange.closeFiff < 0"
-                                [class.positive]="exchange.closeFiff > 0"
-                            >
-                                @if (exchange.closeFiff > 0) {
-                                    +{{exchange.closeFiff}}%
-                                    <img src="chevron-up.svg">
+                                @let closediff = rate.closeDiff;
+                                @if (closediff === null) {
+                                    <span class="exchange-diff-value">
+                                        No previous value
+                                    </span>
                                 } @else {
-                                    {{exchange.closeFiff}}%
-                                    <img src="chevron-down.svg">
+                                    <span 
+                                        class="exchange-diff-value"
+                                        [class.negative]="closediff < 0"
+                                        [class.positive]="closediff > 0"
+                                    >
+                                        @if (closediff > 0) {
+                                            +{{closediff.toFixed(2)}}%
+                                            <img src="chevron-up.svg">
+                                        } @else {
+                                            {{closediff.toFixed(2)}}%
+                                            <img src="chevron-down.svg">
+                                        }
+                                    </span>
                                 }
-                            </span>
+                            </div>
                         </div>
-                    </div>
+                    }
                 }
             </div>
         </details>
