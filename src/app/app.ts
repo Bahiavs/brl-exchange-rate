@@ -1,16 +1,16 @@
 import { Component, computed, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { CurrencyPipe, DatePipe } from '@angular/common';
-import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { CurrentExchangeRateDTO, ExchangeRateService } from './services/exchange-rate.service';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Loader } from "./components/loader/loader";
 import { Input } from "./components/input/input";
+import { Button } from "./components/button/button";
 
 @Component({
   selector: 'app-root',
-  imports: [MatButtonModule, MatIconModule, ReactiveFormsModule, CurrencyPipe, DatePipe, Loader, Input],
+  imports: [MatIconModule, ReactiveFormsModule, CurrencyPipe, DatePipe, Loader, Input, Button],
   templateUrl: 'app.html',
   styleUrl: 'app.css',
 })

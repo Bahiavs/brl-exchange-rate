@@ -8,9 +8,9 @@
 
 <app-input [formCtrl]="currencyCtrl" label="Enter the currency code"/>
 
-<button (click)="getCurrent()" id="result-button" matButton="filled">
+<app-button (click)="getCurrent()" id="result-button">
     EXCHANGE RESULT
-</button>
+</app-button>
 
 <div id="exchange-container">
     @let exchangeRateNow = currentExchangeRate();
