@@ -7,7 +7,7 @@
     gap: 0 30px;
     padding: 0 15px;
     box-sizing: border-box;
-    /* width: min(360px, 100%); */
+    width: min(1280px, 100%);
     margin-inline: auto;
     white-space: nowrap;
     background-color: white;
@@ -150,6 +150,7 @@
     padding: 10px 10px 20px 10px;
     display: grid;
     gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(min(310px, 100%), 1fr));
 }
 
 .exchange-card {
@@ -170,13 +171,13 @@
 
 .exchange-data {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 4px 34px;
+    grid-template-columns: repeat(auto-fit, minmax(min(120px, 100%), 1fr));
+    gap: 4px 30px;
     margin-bottom: 4px;
 
     &>* {
         display: flex;
-        gap: 1rem;
+        gap: 8px;
         justify-content: space-between;
         align-items: baseline;
     }
