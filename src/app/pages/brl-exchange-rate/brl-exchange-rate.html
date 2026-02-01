@@ -12,7 +12,8 @@
 
         <app-input [formCtrl]="currencyCtrl" label="Enter the currency code" />
 
-        <app-button (click)="getCurrent()" aria-label="Get exchange result" class="exchange-result-button">
+        <app-button (click)="getCurrent()" [disabled]="!currencyCtrl.value || currentExchangeRate() === 'loading'"
+            aria-label="Get exchange result" class="exchange-result-button">
             EXCHANGE RESULT
         </app-button>
         @let exchangeRateNow = currentExchangeRate();

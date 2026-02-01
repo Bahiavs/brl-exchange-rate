@@ -1,17 +1,24 @@
-import { ChangeDetectionStrategy, Component, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
     selector: 'app-button',
     imports: [MatButtonModule],
     template: `
-        <button (click)="click.emit($event)" matButton="filled">
+        <button (click)="handleClick($event)" [disabled]="disabled()" matButton="filled">
             <ng-content />
         </button>
     `,
+    host: {
+        '[class.is-disabled]': 'disabled()',
+        '[attr.aria-disabled]': 'disabled()',
+    },
     styles: [`
         :host {
             display: block;
+        }
+        :host(.is-disabled) {
+            pointer-events: none;
         }
         button {
             width: 100%;
@@ -29,5 +36,15 @@ import { MatButtonModule } from '@angular/material/button';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Button {
-    readonly click = output<MouseEvent>()
+    readonly disabled = input<boolean>(false)
+    readonly clicked = output<MouseEvent>({ alias: 'click' })
+
+    protected handleClick(event: MouseEvent) {
+        if (this.disabled()) {
+            event.preventDefault()
+            event.stopPropagation()
+            return
+        }
+        this.clicked.emit(event)
+    }
 }
