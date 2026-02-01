@@ -1,6 +1,3 @@
-@use './app/style/body.scss';
-@use './app/style/root.scss';
-
-hr {
-    margin: 0;
-}
+@use './app/global-styles/body.scss';
+@use './app/global-styles/root.scss';
+@use './app/global-styles/hr.scss';
