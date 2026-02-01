@@ -51,7 +51,6 @@ export class BrlExchangeRate implements OnInit, OnDestroy {
   }
 
   protected getCurrent() {
-    console.log('request')
     if (this.currencyCtrl.value === null) return console.error('invalid currency code')
     this.dailyExchangeRate.set(undefined)
     this.currentExchangeRate.set('loading')
