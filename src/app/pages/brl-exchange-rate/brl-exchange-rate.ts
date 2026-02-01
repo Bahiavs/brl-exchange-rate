@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs';
 import { Loader } from "../../components/loader/loader";
 import { Input } from "../../components/input/input";
 import { Button } from "../../components/button/button";
-import { SnackbarService } from "../../services/snackbar.service";
+import { Snackbar } from "../../components/snackbar/snackbar";
 
 @Component({
   selector: 'brl-exchange-rate',
@@ -17,7 +17,7 @@ import { SnackbarService } from "../../services/snackbar.service";
 })
 export class BrlExchangeRate implements OnInit, OnDestroy {
   private readonly exchangeRateService = inject(ExchangeRateService)
-  private readonly snackbar = inject(SnackbarService)
+  private readonly snackbar = inject(Snackbar)
   protected readonly currencyCtrl = new FormControl('')
   protected readonly currentExchangeRate = signal<undefined | 'loading' | CurrentExchangeRateDTO>(undefined)
   protected readonly dailyExchangeRate = signal<undefined | 'loading' | DailyExchangeRate>(undefined)
