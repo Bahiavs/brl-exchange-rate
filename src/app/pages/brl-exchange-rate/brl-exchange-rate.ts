@@ -70,7 +70,7 @@ export class BrlExchangeRate implements OnInit, OnDestroy {
 
   protected getDaily() {
     const currentExchangeRate = this.currentExchangeRate()
-    if (currentExchangeRate === undefined) return 
+    if (currentExchangeRate === undefined) return
     if (currentExchangeRate === 'loading') return
     this.dailyExchangeRate.set('loading')
     const sub = this.exchangeRateService.getDaily(currentExchangeRate.fromSymbol).subscribe({

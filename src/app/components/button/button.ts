@@ -5,20 +5,13 @@ import { MatButtonModule } from '@angular/material/button';
     selector: 'app-button',
     imports: [MatButtonModule],
     template: `
-        <button (click)="handleClick($event)" [disabled]="disabled()" matButton="filled">
+        <button [disabled]="disabled()" matButton="filled">
             <ng-content />
         </button>
     `,
-    host: {
-        '[class.is-disabled]': 'disabled()',
-        '[attr.aria-disabled]': 'disabled()',
-    },
     styles: [`
         :host {
             display: block;
-        }
-        :host(.is-disabled) {
-            pointer-events: none;
         }
         button {
             width: 100%;
@@ -37,14 +30,4 @@ import { MatButtonModule } from '@angular/material/button';
 })
 export class Button {
     readonly disabled = input<boolean>(false)
-    readonly clicked = output<MouseEvent>({ alias: 'click' })
-
-    protected handleClick(event: MouseEvent) {
-        if (this.disabled()) {
-            event.preventDefault()
-            event.stopPropagation()
-            return
-        }
-        this.clicked.emit(event)
-    }
 }
