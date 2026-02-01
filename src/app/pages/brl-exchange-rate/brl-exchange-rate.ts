@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 import { Loader } from "../../components/loader/loader";
 import { Input } from "../../components/input/input";
 import { Button } from "../../components/button/button";
+import { SnackbarService } from "../../services/snackbar.service";
 
 @Component({
   selector: 'brl-exchange-rate',
@@ -16,6 +17,7 @@ import { Button } from "../../components/button/button";
 })
 export class BrlExchangeRate implements OnInit, OnDestroy {
   private readonly exchangeRateService = inject(ExchangeRateService)
+  private readonly snackbar = inject(SnackbarService)
   protected readonly currencyCtrl = new FormControl('')
   protected readonly currentExchangeRate = signal<undefined | 'loading' | CurrentExchangeRateDTO>(undefined)
   protected readonly dailyExchangeRate = signal<undefined | 'loading' | DailyExchangeRate>(undefined)
@@ -56,14 +58,14 @@ export class BrlExchangeRate implements OnInit, OnDestroy {
     this.getCurrentSub = this.exchangeRateService.getCurrent(this.currencyCtrl.value).subscribe({
       next: res => {
         if (!res.success) {
-          alert('Error getting current exchange rate')
+          this.snackbar.open('Error getting current exchange rate')
           this.currentExchangeRate.set(undefined)
           return
         }
         this.currentExchangeRate.set(res)
       },
       error: err => {
-        alert('Error getting current exchange rate')
+        this.snackbar.open('Error getting current exchange rate')
         this.currentExchangeRate.set(undefined)
       }
     })
@@ -77,7 +79,7 @@ export class BrlExchangeRate implements OnInit, OnDestroy {
     this.getDailySub = this.exchangeRateService.getDaily(currentExchangeRate.fromSymbol).subscribe({
       next: res => {
         if (!res.success) {
-          alert('Error getting daily exchange rate')
+          this.snackbar.open('Error getting daily exchange rate')
           this.dailyExchangeRate.set(undefined)
           return
         }
@@ -98,7 +100,7 @@ export class BrlExchangeRate implements OnInit, OnDestroy {
         this.dailyExchangeRate.set(dailyExchangeRate)
       },
       error: err => {
-        alert('Error getting daily exchange rate')
+        this.snackbar.open('Error getting daily exchange rate')
         this.dailyExchangeRate.set(undefined)
       }
     })
