@@ -21,7 +21,8 @@ export class BrlExchangeRate implements OnInit, OnDestroy {
   protected readonly dailyExchangeRate = signal<undefined | 'loading' | DailyExchangeRate>(undefined)
   protected readonly isExpanded = computed(() => this.dailyExchangeRate() !== undefined)
   private readonly subs = new Subscription()
-  private getDailySub = new Subscription()
+  private getDailySub: Subscription | undefined = undefined
+  private getCurrentSub: Subscription | undefined = undefined
 
   ngOnInit() {
     const sub = this.currencyCtrl.valueChanges.subscribe(value => {
@@ -44,15 +45,15 @@ export class BrlExchangeRate implements OnInit, OnDestroy {
       return
     }
     this.dailyExchangeRate.set(undefined)
-    this.getDailySub.unsubscribe() // Abort request if loading
-    this.getDailySub = new Subscription() // Prevent error when requesting again after any abortion
+    this.getDailySub?.unsubscribe() // Abort request if loading
   }
 
   protected getCurrent() {
+    console.log('request')
     if (this.currencyCtrl.value === null) return console.error('invalid currency code')
     this.dailyExchangeRate.set(undefined)
     this.currentExchangeRate.set('loading')
-    this.exchangeRateService.getCurrent(this.currencyCtrl.value).subscribe({
+    this.getCurrentSub = this.exchangeRateService.getCurrent(this.currencyCtrl.value).subscribe({
       next: res => {
         if (!res.success) {
           alert('Error getting current exchange rate')
@@ -73,7 +74,7 @@ export class BrlExchangeRate implements OnInit, OnDestroy {
     if (currentExchangeRate === undefined) return
     if (currentExchangeRate === 'loading') return
     this.dailyExchangeRate.set('loading')
-    const sub = this.exchangeRateService.getDaily(currentExchangeRate.fromSymbol).subscribe({
+    this.getDailySub = this.exchangeRateService.getDaily(currentExchangeRate.fromSymbol).subscribe({
       next: res => {
         if (!res.success) {
           alert('Error getting daily exchange rate')
@@ -101,7 +102,14 @@ export class BrlExchangeRate implements OnInit, OnDestroy {
         this.dailyExchangeRate.set(undefined)
       }
     })
-    this.getDailySub.add(sub)
+  }
+
+  protected resetState() {
+    this.currencyCtrl.setValue('')
+    this.currentExchangeRate.set(undefined)
+    this.dailyExchangeRate.set(undefined)
+    this.getDailySub?.unsubscribe() // Abort request if loading
+    this.getCurrentSub?.unsubscribe() // Abort request if loading
   }
 }
 

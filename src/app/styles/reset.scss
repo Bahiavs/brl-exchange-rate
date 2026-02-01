@@ -66,3 +66,15 @@ img {
 	display: block;
 	max-width: 100%;
 }
+button {
+	appearance: none;
+	background: none;
+	border: 0;
+	color: inherit;
+	font: inherit;
+	line-height: inherit;
+	margin: 0;
+	padding: 0;
+	text-align: inherit;
+	cursor: pointer;
+}
