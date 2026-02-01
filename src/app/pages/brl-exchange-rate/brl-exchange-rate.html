@@ -1,126 +1,133 @@
-<img src="logo-full.svg" id="logo">
+<div class="page-container">
+    <header>
+        <img class="page-logo" src="logo-full.svg" alt="Action Labs logo">
+    </header>
 
-<hr id="top-divider">
+    <hr class="top-divider">
 
-<div id="title">
-    BRL EXCHANGE RATE
-</div>
+    <main class="page-main">
+        <h1 class="page-title">
+            BRL EXCHANGE RATE
+        </h1>
 
-<app-input [formCtrl]="currencyCtrl" label="Enter the currency code"/>
+        <app-input [formCtrl]="currencyCtrl" label="Enter the currency code" />
 
-<app-button (click)="getCurrent()" id="result-button">
-    EXCHANGE RESULT
-</app-button>
-
-<div id="exchange-container">
-    @let exchangeRateNow = currentExchangeRate();
-    @if (exchangeRateNow === undefined) {}
-    @else if (exchangeRateNow === 'loading') { 
-        <loader style="grid-column: 1 / -1"/> 
-    }
-    @else {
-        <hr id="exchange-divider">
-        <div id="currency-data-container">
-            <div id="exchange-now-container">
-                <div id="exchange-now">Exchange rate now</div>
-                <div id="exchange-time">
+        <app-button (click)="getCurrent()" aria-label="Get exchange result" class="exchange-result-button">
+            EXCHANGE RESULT
+        </app-button>
+        @let exchangeRateNow = currentExchangeRate();
+        @if (exchangeRateNow === undefined) {}
+        @else if (exchangeRateNow === 'loading') {
+        <loader class="exchange-result-loader" />
+        }
+        @else {
+        <hr class="exchange-divider">
+        <section aria-label="Exchange rate now" class="exchange-section">
+            <div>
+                <h2 class="exchange-now">Exchange rate now</h2>
+                <time class="exchange-time" [attr.datetime]="exchangeRateNow.lastUpdatedAt">
                     {{exchangeRateNow.lastUpdatedAt | date:'dd/MM/yyyy - HH\'h\'mm'}}
-                </div>
+                </time>
             </div>
-            <div id="currencies">{{exchangeRateNow.fromSymbol}}/BRL</div>
-            <div id="exchange-rate">
+            <p class="exchange-currencies">
+                {{exchangeRateNow.fromSymbol}}/BRL
+            </p>
+            <p class="exchange-rate">
                 {{exchangeRateNow.exchangeRate | currency: 'BRL':'symbol':'1.2-2':'pt-BR'}}
-            </div>
-        </div>
-        <details [open]="isExpanded()" (click)="$event.preventDefault()" id="expansion-container">
-            <summary id="expansion-header">
-                <span id="expansion-title">
+            </p>
+        </section>
+        <details [open]="isExpanded()" (click)="$event.preventDefault()" class="expansion-container">
+            <summary class="expansion-header">
+                <span class="expansion-title">
                     LAST 30 DAYS
                 </span>
-                <button (click)="toggleExpansion()" id="expansion-button">
+                <button (click)="toggleExpansion()" class="expansion-button" type="button"
+                    aria-label="Toggle last 30 days">
                     @if (!isExpanded()) {
-                        <img src="add.svg">
+                    <img src="add.svg" alt="Expand">
                     }
                     @else {
-                        <img src="remove.svg">
+                    <img src="remove.svg" alt="Collapse">
                     }
                 </button>
             </summary>
-            <div id="expansion-content">
+            <div class="expansion-content">
                 @let dailyExchangeRateVal = dailyExchangeRate();
                 @if (dailyExchangeRateVal === undefined) {}
-                @else if (dailyExchangeRateVal === 'loading') { <loader style="margin-top: 10px"/> }
+                @else if (dailyExchangeRateVal === 'loading') {
+                <loader class="expansion-loader" />
+                }
                 @else {
-                    @for (rate of dailyExchangeRateVal.data; track rate) {
-                        <div class="exchange-card">
-                            <div class="exchange-date">{{rate.date | date:'dd/MM/yyyy'}}</div>
-                            <div class="exchange-data">
-                                <div>
-                                    <span class="exchange-data-title">
-                                        OPEN:
-                                    </span>
-                                    <span class="exchange-data-value">
-                                        R$ {{rate.open}}
-                                    </span>
-                                </div>
-                                <div>
-                                    <span class="exchange-data-title">
-                                        HIGH:
-                                    </span>
-                                    <span class="exchange-data-value">
-                                        R$ {{rate.high}}
-                                    </span>
-                                </div>
-                                <div>
-                                    <span class="exchange-data-title">
-                                        CLOSE:
-                                    </span>
-                                    <span class="exchange-data-value">
-                                        R$ {{rate.close}}
-                                    </span>
-                                </div>
-                                <div>
-                                    <span class="exchange-data-title">
-                                        LOW:
-                                    </span>
-                                    <span class="exchange-data-value">
-                                        R$ {{rate.low}}
-                                    </span>
-                                </div>
-                            </div>
-                            <div>
-                                <span class="exchange-data-title">
-                                    CLOSE DIFF (%):
-                                </span>
-                                @let closediff = rate.closeDiff;
-                                @if (closediff === null) {
-                                    <span class="exchange-diff-value">
-                                        No previous value
-                                    </span>
-                                } @else {
-                                    <span 
-                                        class="exchange-diff-value"
-                                        [class.negative]="closediff < 0"
-                                        [class.positive]="closediff > 0"
-                                    >
-                                        @if (closediff > 0) {
-                                            +{{closediff.toFixed(2)}}%
-                                            <img src="chevron-up.svg">
-                                        } @else {
-                                            {{closediff.toFixed(2)}}%
-                                            <img src="chevron-down.svg">
-                                        }
-                                    </span>
-                                }
-                            </div>
+                @for (rate of dailyExchangeRateVal.data; track rate) {
+                <article class="exchange-card">
+                    <time class="exchange-date" [attr.datetime]="rate.date">
+                        {{rate.date | date:'dd/MM/yyyy'}}
+                    </time>
+                    <dl class="exchange-data">
+                        <div class="exchange-data-row">
+                            <dt class="exchange-data-title">
+                                Open:
+                            </dt>
+                            <dd class="exchange-data-value">
+                                R$ {{rate.open}}
+                            </dd>
                         </div>
-                    }
+                        <div class="exchange-data-row">
+                            <dt class="exchange-data-title">
+                                High:
+                            </dt>
+                            <dd class="exchange-data-value">
+                                R$ {{rate.high}}
+                            </dd>
+                        </div>
+                        <div class="exchange-data-row">
+                            <dt class="exchange-data-title">
+                                Close:
+                            </dt>
+                            <dd class="exchange-data-value">
+                                R$ {{rate.close}}
+                            </dd>
+                        </div>
+                        <div class="exchange-data-row">
+                            <dt class="exchange-data-title">
+                                Low:
+                            </dt>
+                            <dd class="exchange-data-value">
+                                R$ {{rate.low}}
+                            </dd>
+                        </div>
+                    </dl>
+                    <div class="exchange-diff">
+                        <span class="exchange-data-title exchange-diff-label">
+                            Close diff (%):
+                        </span>
+                        @let closediff = rate.closeDiff;
+                        @if (closediff === null) {
+                        <span class="exchange-diff-value">
+                            No previous value
+                        </span>
+                        } @else {
+                        <span class="exchange-diff-value exchange-diff-value--with-icon"
+                            [class.negative]="closediff < 0" [class.positive]="closediff > 0">
+                            @if (closediff > 0) {
+                            +{{closediff.toFixed(2)}}%
+                            <img src="chevron-up.svg" alt="Up" class="exchange-diff-icon">
+                            } @else {
+                            {{closediff.toFixed(2)}}%
+                            <img src="chevron-down.svg" alt="Down" class="exchange-diff-icon">
+                            }
+                        </span>
+                        }
+                    </div>
+                </article>
+                }
                 }
             </div>
         </details>
-    }
+        }
+    </main>
 </div>
 
-<div id="footer">
-    Copyright 2022 - Action Labs
-</div>
+<footer class="page-footer">
+    <small>Copyright 2022 - Action Labs</small>
+</footer>

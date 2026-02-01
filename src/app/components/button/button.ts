@@ -11,7 +11,7 @@ import { MatButtonModule } from '@angular/material/button';
     `,
     styles: [`
         :host {
-            display: inline-block;
+            display: block;
         }
         button {
             width: 100%;

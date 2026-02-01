@@ -16,9 +16,11 @@ import { MatInputModule } from '@angular/material/input';
             display: block;
         }
         mat-form-field {
+            --mat-form-field-filled-container-color: #F4F4F4;
+            --mat-form-field-filled-active-indicator-color: #D9D9D9;
             width: 100%;
         }
-        .mat-mdc-form-field-subscript-wrapper, .mat-mdc-form-field-bottom-align::before {
+        mat-form-field .mat-mdc-form-field-subscript-wrapper, .mat-mdc-form-field-bottom-align::before {
             height: 0;
         }
     `],
